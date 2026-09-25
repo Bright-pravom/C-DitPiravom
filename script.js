@@ -1,6 +1,25 @@
 const header = document.getElementById('site-header');
 const mobileNav = document.getElementById('mobile-nav');
 const toggleButton = document.querySelector('.nav-toggle');
+const WHATSAPP_NUMBER = '919447921498';
+const WHATSAPP_MESSAGE = 'Hello, I would like to know more about the courses and institution.';
+
+const initWhatsAppButton = () => {
+  if (document.querySelector('.whatsapp-floating-button')) return;
+  const scriptElement = document.currentScript;
+  if (!scriptElement) return;
+
+  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+  const iconUrl = new URL('assets/icons/whatsapp.svg', scriptElement.src).href;
+  const button = document.createElement('a');
+  button.className = 'whatsapp-floating-button';
+  button.href = whatsappUrl;
+  button.target = '_blank';
+  button.rel = 'noopener noreferrer';
+  button.setAttribute('aria-label', 'Chat with us on WhatsApp');
+  button.innerHTML = `<img src="${iconUrl}" alt="" width="28" height="28" />`;
+  document.body.appendChild(button);
+};
 
 const updateHeaderState = () => {
   if (!header) return;
@@ -26,6 +45,7 @@ const renderFeaturedCourses = () => {
   const featuredCourses = window.cditData.courses.filter((course) => course.featured).slice(0, 6);
   target.innerHTML = featuredCourses.map((course) => `
     <article class="course-card">
+      ${course.categories.includes('PSC Approved') ? '<img class="psc-approved-badge" src="assets/pscapproved.png" alt="PSC Approved" width="88" height="88" />' : ''}
       <img src="${course.image}" alt="${course.name}" loading="lazy" width="800" height="550" />
       <div class="course-card-content">
         <div class="course-meta">
@@ -111,3 +131,4 @@ const handleFormSubmit = (formId, successId) => {
 renderFeaturedCourses();
 initAccordions();
 handleFormSubmit('home-enquiry-form', 'home-success');
+initWhatsAppButton();
