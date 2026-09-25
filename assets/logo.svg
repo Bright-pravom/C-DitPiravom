@@ -1,0 +1,8 @@
+<svg width="180" height="48" viewBox="0 0 180 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="48" height="48" rx="14" fill="#2563EB"/>
+  <path d="M14 17.5C14 15.567 15.567 14 17.5 14H30.5C32.433 14 34 15.567 34 17.5V30.5C34 32.433 32.433 34 30.5 34H17.5C15.567 34 14 32.433 14 30.5V17.5Z" fill="#DBEAFE"/>
+  <path d="M20 23.5H28M22 27.5H29" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M15 10L23 6L31 10" stroke="#38BDF8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M20 34V38H28V34" stroke="#DBEAFE" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="56" y="30" fill="#0F172A" font-family="Arial, sans-serif" font-weight="700" font-size="21">C-DIT</text>
+</svg>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Page Not Found | C-DIT Computer Education</title>
+    <meta name="description" content="The page you requested could not be found." />
+    <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header" id="site-header">
+      <div class="container header-inner">
+        <a href="index.html" class="brand"><img src="assets/logo.svg" alt="C-DIT logo" class="brand-mark" /><span class="brand-text">C-DIT</span></a>
+        <nav class="nav" aria-label="Main navigation">
+          <a href="index.html">Home</a>
+          <a href="courses/index.html">Courses</a>
+          <a href="gallery/index.html">Gallery</a>
+          <a href="contact/index.html">Contact</a>
+        </nav>
+        <a href="courses/index.html" class="btn btn-primary nav-cta">Explore Courses</a>
+        <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
+      </div>
+      <div class="mobile-nav" id="mobile-nav">
+        <div class="container mobile-nav-inner">
+          <a href="index.html">Home</a>
+          <a href="courses/index.html">Courses</a>
+          <a href="gallery/index.html">Gallery</a>
+          <a href="contact/index.html">Contact</a>
+          <a href="courses/index.html" class="btn btn-primary">Explore Courses</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="not-found">
+      <div class="not-found-card">
+        <h1>404</h1>
+        <h2>Looks like this page took a wrong turn.</h2>
+        <p>We couldn’t find the page you were looking for, but there are plenty of courses and learning resources to explore.</p>
+        <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-top: 20px;">
+          <a href="index.html" class="btn btn-primary">Back Home</a>
+          <a href="courses/index.html" class="btn btn-secondary">Explore Courses</a>
+        </div>
+      </div>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

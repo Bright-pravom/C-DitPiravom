@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>C-DIT Computer Education | Learn. Build. Create. Grow.</title>
+    <meta name="description" content="C-DIT Computer Education offers practical computer and technology learning for students, beginners, and professionals through hands-on courses and guidance." />
+    <meta property="og:title" content="C-DIT Computer Education" />
+    <meta property="og:description" content="Practical computer education and technology training for learners of all levels." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header" id="site-header">
+      <div class="container header-inner">
+        <a href="index.html" class="brand" aria-label="C-DIT Computer Education home">
+          <img src="assets/logo.svg" alt="C-DIT logo" class="brand-mark" />
+          <span class="brand-text">C-DIT</span>
+        </a>
+        <nav class="nav" aria-label="Main navigation">
+          <a href="index.html" class="active">Home</a>
+          <a href="courses/index.html">Courses</a>
+          <a href="gallery/index.html">Gallery</a>
+          <a href="contact/index.html">Contact</a>
+        </nav>
+        <a href="courses/index.html" class="btn btn-primary nav-cta">Explore Courses</a>
+        <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
+      </div>
+      <div class="mobile-nav" id="mobile-nav">
+        <div class="container mobile-nav-inner">
+          <a href="index.html" class="active">Home</a>
+          <a href="courses/index.html">Courses</a>
+          <a href="gallery/index.html">Gallery</a>
+          <a href="contact/index.html">Contact</a>
+          <a href="courses/index.html" class="btn btn-primary">Explore Courses</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <span class="eyebrow">Practical learning for real growth</span>
+            <h1>Learn. <span class="gradient-text">Build.</span> Create. Grow.</h1>
+            <p>At C-DIT Computer Education, we help students, beginners, and working learners gain practical digital skills, technical confidence, and guidance for everyday learning and future opportunities.</p>
+            <div class="hero-actions">
+              <a href="courses/index.html" class="btn btn-primary">Explore Courses →</a>
+              <a href="contact/index.html" class="btn btn-secondary">Contact Us</a>
+            </div>
+          </div>
+          <div class="hero-visual" aria-label="Education technology illustration">
+            <div class="hero-frame">
+              <div class="bg-blobs"></div>
+              <div class="hero-card card-top"><span class="hero-icon">✓</span> Practical Learning</div>
+              <div class="hero-card card-mid"><span class="hero-icon">✦</span> Hands-on Training</div>
+              <div class="hero-card card-bottom"><span class="hero-icon">▣</span> Student Guidance</div>
+              <div class="device" aria-hidden="true">
+                <div class="device-header"></div>
+                <div class="device-body">
+                  <div class="code-bars">
+                    <div class="code-bar"><span class="code-pill"></span></div>
+                    <div class="code-bar"><span class="code-pill"></span><span class="code-pill"></span></div>
+                    <div class="code-bar"><span class="code-pill"></span></div>
+                    <div class="code-bar"><span class="code-pill"></span><span class="code-pill"></span></div>
+                  </div>
+                  <div class="lesson-row">
+                    <div class="lesson-box">
+                      <span class="label">Course</span>
+                      <strong>Web Basics</strong>
+                    </div>
+                    <div class="lesson-box">
+                      <span class="label">Support</span>
+                      <strong>1:1 Guidance</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="marquee-wrap" aria-label="Technology and tools list">
+        <div class="container">
+          <div class="marquee">
+            <span><span class="marquee-dot"></span> Python</span>
+            <span><span class="marquee-dot"></span> C++</span>
+            <span><span class="marquee-dot"></span> Java</span>
+            <span><span class="marquee-dot"></span> HTML</span>
+            <span><span class="marquee-dot"></span> CSS</span>
+            <span><span class="marquee-dot"></span> JavaScript</span>
+            <span><span class="marquee-dot"></span> SQL</span>
+            <span><span class="marquee-dot"></span> Git</span>
+            <span><span class="marquee-dot"></span> MS Office</span>
+            <span><span class="marquee-dot"></span> Photoshop</span>
+            <span><span class="marquee-dot"></span> Python</span>
+            <span><span class="marquee-dot"></span> C++</span>
+            <span><span class="marquee-dot"></span> Java</span>
+            <span><span class="marquee-dot"></span> HTML</span>
+            <span><span class="marquee-dot"></span> CSS</span>
+            <span><span class="marquee-dot"></span> JavaScript</span>
+            <span><span class="marquee-dot"></span> SQL</span>
+            <span><span class="marquee-dot"></span> Git</span>
+            <span><span class="marquee-dot"></span> MS Office</span>
+            <span><span class="marquee-dot"></span> Photoshop</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-header">
+            <span class="eyebrow">Learning paths</span>
+            <h2 class="section-heading">Featured Courses</h2>
+            <p class="section-intro">Explore some of the courses designed to build practical computer and technology skills.</p>
+          </div>
+          <div class="course-grid" id="featured-courses"></div>
+        </div>
+      </section>
+
+      <section class="section-small" style="background: var(--surface);">
+        <div class="container">
+          <div class="section-header">
+            <span class="eyebrow">Beyond classes</span>
+            <h2 class="section-heading">More Than Just Computer Classes</h2>
+            <p class="section-intro">We help learners build practical skills, understand technology, and get support beyond regular classroom learning.</p>
+          </div>
+          <div class="service-grid">
+            <article class="service-card">
+              <div class="icon">🌐</div>
+              <h3>Website Creation</h3>
+              <p>Website solutions for businesses, organizations, events, and personal projects.</p>
+            </article>
+            <article class="service-card">
+              <div class="icon">🎓</div>
+              <h3>Student Guidance</h3>
+              <p>Guidance to help students understand learning options, technology skills, and possible paths forward.</p>
+            </article>
+            <article class="service-card">
+              <div class="icon">💻</div>
+              <h3>Project Support</h3>
+              <p>Practical technical guidance for academic and personal technology projects.</p>
+            </article>
+            <article class="service-card">
+              <div class="icon">🎨</div>
+              <h3>Digital &amp; Creative Services</h3>
+              <p>Computer-based design and digital support for individuals and organizations.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-header">
+            <span class="eyebrow">Why learn here</span>
+            <h2 class="section-heading">Why Learn With Us?</h2>
+            <p class="section-intro">A welcoming learning environment with practical support and clear guidance for everyday digital growth.</p>
+          </div>
+          <div class="why-grid">
+            <article class="why-card why-featured">
+              <div class="icon">🧠</div>
+              <h3>Practical Learning</h3>
+              <p>Learn by doing with guided exercises, project practice, and clear concepts that connect to real-world technology use.</p>
+            </article>
+            <article class="why-card">
+              <div class="icon">🤝</div>
+              <h3>Beginner Friendly</h3>
+              <p>Courses and support designed for learners with different levels of experience.</p>
+            </article>
+            <article class="why-card">
+              <div class="icon">🛠️</div>
+              <h3>Hands-on Practice</h3>
+              <p>Build confidence through exercises that strengthen technical understanding and working habits.</p>
+            </article>
+            <article class="why-card">
+              <div class="icon">🌱</div>
+              <h3>Student Guidance</h3>
+              <p>Get support in understanding learning options and choosing the right technology path.</p>
+            </article>
+            <article class="why-card">
+              <div class="icon">📍</div>
+              <h3>Local &amp; Accessible</h3>
+              <p>Visit a physical learning space that offers direct communication and easy guidance.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-small" style="background: var(--surface-alt);">
+        <div class="container">
+          <div class="section-header">
+            <span class="eyebrow">Our environment</span>
+            <h2 class="section-heading">Life at Our Institute</h2>
+            <p class="section-intro">A glimpse of classes, activities, workshops and moments from our learning environment.</p>
+          </div>
+          <div class="gallery-grid gallery-preview">
+            <div class="gallery-item large">
+              <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80" alt="Students learning together in a classroom" />
+              <div class="gallery-overlay">Classes</div>
+            </div>
+            <div class="gallery-item medium">
+              <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80" alt="Practical technology learning session" />
+              <div class="gallery-overlay">Activities</div>
+            </div>
+            <div class="gallery-item small">
+              <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=80" alt="Workshop in progress" />
+              <div class="gallery-overlay">Workshops</div>
+            </div>
+            <div class="gallery-item small">
+              <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80" alt="Hands-on coding practice" />
+              <div class="gallery-overlay">Students</div>
+            </div>
+            <div class="gallery-item medium">
+              <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80" alt="Creative digital learning environment" />
+              <div class="gallery-overlay">Institute</div>
+            </div>
+          </div>
+          <div class="gallery-button">
+            <a href="gallery/index.html" class="btn btn-secondary">View Full Gallery →</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="contact-panel">
+            <div class="contact-grid">
+              <div>
+                <span class="eyebrow">Get in touch</span>
+                <h2 class="section-heading" style="margin-top: 14px;">Let’s Start Learning</h2>
+                <p class="section-intro">Have a question about a course or want to know which option is right for you? Get in touch with us.</p>
+                <div class="contact-list">
+                  <div class="contact-card">
+                    <div class="contact-icon">☎</div>
+                    <div>
+                      <strong>Phone</strong>
+                      <a href="tel:[PHONE NUMBER]">[PHONE NUMBER]</a>
+                    </div>
+                  </div>
+                  <div class="contact-card">
+                    <div class="contact-icon">✉</div>
+                    <div>
+                      <strong>Email</strong>
+                      <a href="mailto:[EMAIL]">[EMAIL]</a>
+                    </div>
+                  </div>
+                  <div class="contact-card">
+                    <div class="contact-icon">📍</div>
+                    <div>
+                      <strong>Address</strong>
+                      <span>[ADDRESS]</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <form class="enquiry-form" id="home-enquiry-form" novalidate>
+                <div class="form-grid">
+                  <div class="field-group">
+                    <label for="home-name">Name</label>
+                    <input id="home-name" class="field" name="name" type="text" placeholder="Your name" />
+                    <div class="error-text" data-error-for="name"></div>
+                  </div>
+                  <div class="field-group">
+                    <label for="home-phone">Phone</label>
+                    <input id="home-phone" class="field" name="phone" type="tel" placeholder="Your phone number" />
+                    <div class="error-text" data-error-for="phone"></div>
+                  </div>
+                  <div class="field-group wide">
+                    <label for="home-course">Interested Course</label>
+                    <input id="home-course" class="field" name="course" type="text" placeholder="Which course interests you?" />
+                    <div class="error-text" data-error-for="course"></div>
+                  </div>
+                  <div class="field-group wide">
+                    <label for="home-message">Message</label>
+                    <textarea id="home-message" class="field" name="message" rows="4" placeholder="Tell us what you’d like to learn"></textarea>
+                    <div class="error-text" data-error-for="message"></div>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 18px; width: 100%;">Send Enquiry</button>
+                <div class="form-success" id="home-success">Thanks! Your enquiry has been prepared. Please contact the institute using the details above to complete your enquiry.</div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div>
+            <div class="footer-brand">C-DIT Computer Education</div>
+            <p class="footer-copy">Learn • Build • Create • Grow</p>
+          </div>
+          <div>
+            <h3>Explore</h3>
+            <ul class="footer-list">
+              <li><a href="courses/index.html">Courses</a></li>
+              <li><a href="gallery/index.html">Gallery</a></li>
+              <li><a href="contact/index.html">Contact</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Legal</h3>
+            <ul class="footer-list">
+              <li><a href="terms/index.html">Terms &amp; Conditions</a></li>
+              <li><a href="privacy/index.html">Privacy Policy</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3>Contact</h3>
+            <ul class="footer-list">
+              <li><a href="tel:[PHONE NUMBER]">[PHONE NUMBER]</a></li>
+              <li><a href="mailto:[EMAIL]">[EMAIL]</a></li>
+              <li><span>[ADDRESS]</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-meta">
+          <span>© 2026 C-DIT Computer Education</span>
+          <span>Social links available on request</span>
+        </div>
+      </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
