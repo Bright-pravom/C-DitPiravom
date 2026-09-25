@@ -311,14 +311,21 @@ main { overflow: hidden; }
   background: var(--surface);
   overflow: hidden;
 }
+.marquee-wrap > .container {
+  width: 100%;
+  max-width: none;
+  overflow: hidden;
+}
 .marquee {
   display: flex;
   align-items: center;
   gap: 18px;
-  min-width: max-content;
+  width: max-content;
   white-space: nowrap;
   padding: 18px 0;
-  animation: marquee-scroll 24s linear infinite;
+  animation: marquee-scroll 56s linear infinite;
+  animation-iteration-count: infinite;
+  will-change: transform;
 }
 .marquee:hover { animation-play-state: paused; }
 .marquee span {
@@ -333,7 +340,13 @@ main { overflow: hidden; }
   font-weight: 600;
 }
 .marquee-dot { width: 8px; height: 8px; border-radius: 999px; background: var(--primary); }
-@keyframes marquee-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes marquee-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee { animation: none; }
+}
 
 .section-header { margin-bottom: 30px; }
 .course-grid, .service-grid, .why-grid, .gallery-grid, .feature-grid, .info-grid, .stat-grid { display: grid; gap: 22px; }
@@ -629,4 +642,11 @@ main { overflow: hidden; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+/* The course strip is an intentional, continuously moving display. */
+.marquee {
+  animation: marquee-scroll 56s linear infinite !important;
+  animation-duration: 100s !important;
+  animation-iteration-count: infinite !important;
 }
