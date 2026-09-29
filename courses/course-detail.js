@@ -32,6 +32,20 @@ if (course) {
     modulesList.innerHTML = course.modules.map((module) => `
       <li><span class="checkmark">✓</span><span>${module}</span></li>
     `).join('');
+    const moduleItems = modulesList.querySelectorAll('li');
+    if ('IntersectionObserver' in window) {
+      const moduleObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      moduleItems.forEach((item) => moduleObserver.observe(item));
+    } else {
+      moduleItems.forEach((item) => item.classList.add('is-visible'));
+    }
   }
 } else {
   const main = document.querySelector('main');

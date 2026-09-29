@@ -46,7 +46,9 @@ const renderFeaturedCourses = () => {
   target.innerHTML = featuredCourses.map((course) => `
     <article class="course-card">
       ${course.categories.includes('PSC Approved') ? '<img class="psc-approved-badge" src="assets/pscapproved.png" alt="PSC Approved" width="88" height="88" />' : ''}
-      <img src="${course.image}" alt="${course.name}" loading="lazy" width="800" height="550" />
+      <div class="course-card-media">
+        <img src="${course.image}" alt="${course.name}" loading="lazy" width="800" height="550" />
+      </div>
       <div class="course-card-content">
         <div class="course-meta">
           <span>${course.categoryPrimary}</span>
