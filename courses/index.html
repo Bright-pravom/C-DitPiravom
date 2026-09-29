@@ -2,13 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Explore Our Courses | C-DIT Computer Education</title>
     <meta name="description" content="Browse practical computer and technology courses at C-DIT, from digital literacy and office skills to web development and creative learning." />
     <link rel="icon" type="image/svg+xml" href="../assets/logo.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Newsreader:opsz,wght@6..72,700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../styles.css" />
   </head>
   <body>
@@ -61,16 +61,32 @@
               <span class="search-icon">⌕</span>
               <input id="course-search" class="field" type="search" aria-label="Search courses" placeholder="Search courses..." />
             </div>
-            <div class="filter-row" id="filter-row">
-              <select id="category-filter" class="field" aria-label="Filter by category">
-                <option value="all">All Categories</option>
-              </select>
-              <select id="duration-filter" class="field" aria-label="Filter by duration">
-                <option value="all">All Durations</option>
-              </select>
-              <select id="level-filter" class="field" aria-label="Filter by level">
-                <option value="all">All Levels</option>
-              </select>
+            <button class="mobile-filter-toggle" id="mobile-filter-toggle" type="button" aria-expanded="false" aria-controls="mobile-filter-sheet">
+              Filters <span class="filter-count" id="filter-count" aria-live="polite"></span>
+            </button>
+            <div class="filter-sheet" id="mobile-filter-sheet" aria-hidden="true" aria-labelledby="filter-sheet-title">
+              <button class="filter-sheet-backdrop" type="button" aria-label="Close filters"></button>
+              <section class="filter-sheet-panel" aria-labelledby="filter-sheet-title">
+                <div class="filter-sheet-heading">
+                  <h2 id="filter-sheet-title">Filters</h2>
+                  <button class="filter-sheet-close" type="button" aria-label="Close filters">×</button>
+                </div>
+                <div class="filter-row" id="filter-row">
+                  <select id="category-filter" class="field" aria-label="Filter by category">
+                    <option value="all">All Categories</option>
+                  </select>
+                  <select id="duration-filter" class="field" aria-label="Filter by duration">
+                    <option value="all">All Durations</option>
+                  </select>
+                  <select id="level-filter" class="field" aria-label="Filter by level">
+                    <option value="all">All Levels</option>
+                  </select>
+                </div>
+                <div class="filter-sheet-actions">
+                  <button class="btn btn-secondary" id="clear-course-filters" type="button">Clear</button>
+                  <button class="btn btn-primary" id="apply-course-filters" type="button">Apply</button>
+                </div>
+              </section>
             </div>
           </div>
           <div id="category-tabs" class="category-tabs" aria-label="Course categories"></div>

@@ -17,7 +17,137 @@ A set of ready-made assets is provided in `/ui-assets` (icons, one hero illustra
     └── corner-glow.svg   (soft radial accent, use behind sections sparingly)
 ```
 
-All icons are stroke-based, `stroke="currentColor"`, no fill except small accent dots — so they inherit whatever color you set via CSS (`color: var(--primary)` etc.) and can be recolored per section without editing the SVGs.
+All icons are stroke-based, `stroke="currentColor"`, no fill exc# AGENT PROMPT — Mobile Optimization Pass for the C-DIT Website
+
+You are a front-end engineer improving **mobile performance and usability** on an existing static site (`/website`). This is a mobile-specific pass: desktop layout, content, and functionality should be unaffected unless a task below explicitly says otherwise. Test everything against real breakpoints (360px, 390px, 412px, 430px) not just Chrome DevTools' default 375px — the current CSS only defines breakpoints at `1030px` and `760px`, nothing tuned for small-phone widths.
+
+Work through tasks in order. Each has: what's wrong (with the exact selector/file), what to do, and how to verify.
+
+---
+
+## 1. Fix the course marquee overriding `prefers-reduced-motion` (accessibility + battery)
+
+At the very bottom of `styles.css`, this rule exists:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; ... }
+}
+/* The course strip is an intentional, continuously moving display. */
+.marquee {
+  animation: marquee-scroll 56s linear infinite !important;
+  animation-duration: 100s !important;
+  animation-iteration-count: infinite !important;
+}
+```
+
+Because `.marquee` has higher specificity than the universal `*` selector, this **forces the marquee to keep animating even for users who have `prefers-reduced-motion: reduce` set** — the one animation on the entire site most likely to trigger motion sensitivity, running non-stop, un-disableable. It also means the marquee never stops animating even when scrolled off-screen, which costs CPU/battery on low-end Android continuously for as long as the tab is open.
+
+- **Do:**
+  - Remove the `!important` overrides on `.marquee`, or explicitly add `.marquee { animation: none; }` inside the existing `prefers-reduced-motion: reduce` block so it's respected like every other animation.
+  - Pause the marquee animation when it's not in the viewport: use an `IntersectionObserver` on `.marquee-wrap` to toggle a class that sets `animation-play-state: paused` when it scrolls out of view, resuming when it scrolls back in. This alone meaningfully cuts background CPU use on long scroll sessions.
+  - Keep the existing hover-to-pause behavior for desktop; the IntersectionObserver behavior is mobile-relevant since there's no hover there.
+- **Verify:** with OS-level "reduce motion" enabled, the marquee is static. Scroll the marquee out of view in a mobile emulator and confirm (via DevTools Performance/rendering) that it's no longer animating while off-screen.
+
+## 2. Replace the always-visible triple-`<select>` filter row with a mobile filter sheet
+
+In `courses/index.html`, the `.filter-row` contains three `<select>` elements (category, duration, level) that are always rendered, stacked full-width under 760px (`.filter-row { grid-template-columns: 1fr }`). Combined with the search input and the category-tabs row above the results, a mobile visitor has to scroll past a tall stack of controls before seeing a single course. This is exactly the "modal/bottom sheet for filters" pattern the site was originally designed around but never implemented for mobile.
+
+- **Do:**
+  - Below 760px, replace the visible `.filter-row` with a single **"Filters" button** next to the search input (`.catalogue-tools` becomes: search input + compact filter button, side by side, not stacked).
+  - Tapping the Filters button opens a **bottom sheet** (a fixed-position panel sliding up from the bottom, `position: fixed; bottom: 0; left: 0; right: 0;` with a backdrop) containing the same three selects (or convert them to touch-friendlier button-groups/chips inside the sheet) plus "Apply" and "Clear" actions.
+  - Show an active-filter-count badge on the Filters button (e.g. a small numbered dot) when any non-default filter is set, so users know filters are applied without opening the sheet.
+  - Keep `courses/course-catalog.js`'s existing filtering logic (`getFilteredCourses`, `renderCourseResults`) untouched — this is a UI wrapper around the existing selects, not a rewrite of the filtering logic. The sheet's selects can be the *same* `#category-filter`/`#duration-filter`/`#level-filter` elements just relocated into the sheet markup, or mirrored elements that sync values into the originals — pick whichever is less invasive to the existing JS.
+  - Desktop layout (above 760px) keeps the current always-visible filter row unchanged.
+- **Verify:** on a 390px viewport, the search bar and Filters button fit on one line without wrapping, opening the sheet doesn't cause the page behind it to scroll (lock `body` scroll while open, same pattern already used for the mobile nav in `script.js`), and closing/applying correctly re-renders `#course-results`.
+
+## 3. Animate the mobile nav drawer and add a backdrop
+
+`.mobile-nav { display: none; }` → `.mobile-nav.open { display: block; }` in `styles.css` is an instant, hard toggle — no transition, and nothing dims the page content behind it, so it doesn't read as an overlay.
+
+- **Do:**
+  - Change the toggle to animate: keep the element in the DOM/layout (e.g. `max-height: 0; overflow: hidden;` → `max-height: 70vh` with a `transition`, or `transform: translateY(-8px); opacity: 0;` → `translateY(0); opacity: 1;` with `visibility` handled via a short transition-delay) instead of a hard `display` swap.
+  - Add a backdrop element (a fixed, full-screen semi-transparent overlay behind the drawer, `background: rgba(15,23,42,0.4)`) that fades in with the drawer and, when tapped, closes the menu (call the same handler the `nav-toggle` button uses).
+  - This is purely visual/UX — don't change the nav's link structure, the toggle button's ARIA attributes, or `script.js`'s existing `aria-expanded` handling.
+- **Verify:** opening the menu on a mobile viewport shows a dimmed backdrop behind it with a smooth transition, tapping the backdrop closes the menu, and `body` scroll remains locked while open (already implemented in `script.js` — don't duplicate that logic).
+
+## 4. Add safe-area support for notches and gesture bars
+
+No page currently declares `viewport-fit=cover`, and no CSS anywhere uses `env(safe-area-inset-*)`. On modern phones (notches, Dynamic Island, Android gesture bars) this means the floating WhatsApp button, the sticky header, and the mobile nav drawer can sit flush against or get clipped by the system UI.
+
+- **Do:**
+  - Update the `<meta name="viewport">` tag on **every** HTML page to: `<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />`. Do not add `maximum-scale` or `user-scalable=no` — pinch-zoom must remain available.
+  - Add to `styles.css`:
+    ```css
+    :root {
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    ```
+  - `.whatsapp-floating-button`: change `bottom` to `calc(<current-value> + var(--safe-bottom))` at both the base and the 760px-breakpoint override.
+  - `.site-header` (if it's sticky/fixed — confirm in CSS) and `.mobile-nav`: add `padding-top: var(--safe-top)` where they sit at the very top of the viewport.
+  - If the mobile nav or bottom sheet (from Task 2) has bottom-anchored action buttons, give their container `padding-bottom: calc(20px + var(--safe-bottom))`.
+- **Verify:** in a simulator/device with a bottom gesture bar or notch, the WhatsApp button and any bottom sheet actions have visible clearance, not flush against the system UI.
+
+## 5. Trim the Google Fonts payload
+
+Every page loads:
+```
+family=Inter:wght@400;500;600;700;800;900
+```
+Six weights of one family is more than this design actually uses (headings are bold display text, body is regular/medium, buttons are semibold) — this is unnecessary weight on every page load, worse on mobile networks. This is also the original spec's own stated goal ("avoid excessive web fonts") not currently met.
+
+- **Do:** audit actual `font-weight` usages across `styles.css`, then trim the Google Fonts URL to only the weights actually referenced (commonly `400;600;700` is enough — verify against real usage before finalizing, e.g. `grep -n "font-weight" styles.css`). Apply the trimmed URL consistently across every HTML file's `<head>`.
+- **Verify:** `grep -n "font-weight" styles.css` output only references weights present in the trimmed `@import`/`<link>` URL; visually confirm no heading/button/label renders with a synthetic (browser-faked) bold/weight as a result of removing a weight still in use.
+
+## 6. Prevent layout shift and oversized image downloads on mobile
+
+- Every content image (`course-card img`, `gallery-item img`, hero/device imagery) currently ships with fixed `width`/`height` HTML attributes but no CSS `aspect-ratio`, and there is no `srcset`/`sizes` anywhere — mobile devices download the same image dimensions as desktop.
+- **Do:**
+  - Add `aspect-ratio` in CSS matching each image's intended ratio (e.g. `.course-card img { aspect-ratio: 16/11; width: 100%; height: auto; }`) so reserved space is correct before the image loads, regardless of the actual file dimensions.
+  - Once real photography replaces the current stock images (tracked separately), generate at least two sizes per image and add `srcset`/`sizes` so phones don't download desktop-resolution files. If that's out of scope for this pass, leave a `[NEEDS: responsive image pipeline once real photos are added]` note rather than skipping silently.
+  - Confirm every content `<img>` keeps `loading="lazy"` (already present on course/gallery images per `course-catalog.js`/`gallery.js` — don't remove it, just don't let this task regress it).
+- **Verify:** throttle to a slow 4G profile in DevTools and confirm no visible layout jump as images load in.
+
+## 7. Add a small-phone breakpoint tier
+
+Only two breakpoints exist (`1030px`, `760px`); nothing is tuned specifically for ~360–400px Android/iPhone widths, which is where hero type scale, button stacking, and card padding are most likely to feel cramped or overflow.
+
+- **Do:** add a `@media (max-width: 400px)` block (after the existing 760px block) that at minimum:
+  - Reduces `.hero h1` clamp minimum slightly if it currently overflows a 360px-wide viewport.
+  - Reduces `.section { padding: ... }` further than the 760px value (e.g. down to ~56px) so small screens aren't over-padded relative to their height.
+  - Confirms `.contact-panel`, `.enquiry-form`, and card padding don't push content edge-to-edge with no breathing room (check against the real `--border`/padding values already in `styles.css`).
+- **Verify:** test at 360×640 and 390×844 — no horizontal scroll, no text overflow/clipping, hero fits above the fold reasonably.
+
+## 8. Ensure every interactive element has non-hover feedback
+
+Several affordances currently only change on `:hover` (e.g. `.link-arrow`/"View Details →" underline, `.category-tab`/`.chip` border-color change) — hover never fires on touch, so tapping gives zero visual confirmation before navigation/state-change happens.
+
+- **Do:** add `:active` states (in addition to existing `:hover`/`:focus-visible`) for all tappable elements — buttons, cards, category tabs, chips, links with hover-only affordances — using a brief `transform: scale(0.97)` or an immediate background/color shift, so touch input gets instant feedback. Keep transitions short (~100ms) so it doesn't feel laggy.
+- **Verify:** on an actual touch device (or Chrome DevTools touch emulation), tapping any of the above shows a visible state change during the tap, not just on release/navigation.
+
+## 9. Confirm touch target sizing
+
+- `.nav-toggle` is already 48×48px — good, leave as is.
+- `.category-tab` and `.chip` use `padding: 10px 16px` / `10px 14px` with inherited body line-height — measure their actual rendered height; if it's under ~44px, increase vertical padding until it clears that minimum (WCAG 2.5.5 / mobile tap-target guidance).
+- **Verify:** measure rendered height of `.category-tab` and `.chip` in a mobile viewport; both ≥44px tall.
+
+## 10. Verify the gallery masonry at small widths
+
+`.gallery-masonry { columns: 3 240px; column-gap: 18px; }` has no explicit mobile override in either breakpoint. CSS multi-column with a width hint *should* auto-reduce to 1 column once the viewport can't fit 240px×3, but confirm this actually happens cleanly on a 360–390px screen (check for any oddly-ordered items, since CSS columns fill top-to-bottom-then-next-column, which can visually scramble a chronological/categorized gallery on narrow screens).
+- **Do:** if the auto-collapse doesn't look right, add an explicit `@media (max-width: 760px) { .gallery-masonry { columns: 1 100%; } }`.
+- **Verify:** visually confirm gallery ordering and layout look correct at 360–390px width.
+
+---
+
+## What NOT to do in this pass
+- Don't change desktop layout/behavior except where a task explicitly touches a shared selector — double check any shared CSS rule you edit still looks correct above 1030px.
+- Don't rewrite `course-catalog.js`'s filtering logic — only wrap/relocate its existing UI controls for the mobile sheet (Task 2).
+- Don't add `maximum-scale` or `user-scalable=no` to any viewport meta tag — zoom must stay available for accessibility.
+- Don't introduce a JS framework or build step for any of the above; everything here is achievable with the existing plain HTML/CSS/JS.
+
+## Deliverable
+A changelog listing every file/selector touched per numbered task, plus confirmation (screenshots or a short note) that Tasks 1–4 were tested on an actual small-viewport/touch emulation, not just resized on a desktop browser window.ept small accent dots — so they inherit whatever color you set via CSS (`color: var(--primary)` etc.) and can be recolored per section without editing the SVGs.
 
 ---
 
