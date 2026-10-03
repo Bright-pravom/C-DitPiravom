@@ -7,8 +7,47 @@ const setText = (selector, value) => {
   if (element) element.textContent = value || '-';
 };
 
+const setMetaContent = (selector, value) => {
+  const element = document.querySelector(selector);
+  if (element) element.setAttribute('content', value);
+};
+
 if (course) {
-  document.title = `${course.name} | C-DIT Computer Education`;
+  const titleSuffix = ' | C-Dit Piravom';
+  const localizedCourseTitle = `${course.name} in Piravom${titleSuffix}`;
+  document.title = localizedCourseTitle.length <= 60
+    ? localizedCourseTitle
+    : `${course.name.slice(0, 60 - titleSuffix.length - 1).trimEnd()}…${titleSuffix}`;
+  const descriptionSuffix = ' Offered in Piravom, Ernakulam.';
+  const maxDescriptionPrefixLength = 155 - descriptionSuffix.length;
+  let descriptionPrefix = course.shortDescription.trim();
+  if (descriptionPrefix.length > maxDescriptionPrefixLength) {
+    descriptionPrefix = `${descriptionPrefix.slice(0, maxDescriptionPrefixLength - 1).replace(/\s+\S*$/, '').trimEnd()}…`;
+  }
+  const localizedDescription = `${descriptionPrefix}${descriptionSuffix}`;
+  const localizedShareTitle = `${course.name} in Piravom | C-Dit Piravom`;
+  setMetaContent('meta[name="description"]', localizedDescription);
+  setMetaContent('meta[property="og:title"]', localizedShareTitle);
+  setMetaContent('meta[property="og:description"]', localizedDescription);
+  const canonical = document.querySelector('link[rel="canonical"]');
+  if (canonical) {
+    canonical.href = `https://c-ditpiravom.in/courses/course-detail.html?slug=${encodeURIComponent(course.slug)}`;
+  }
+
+  const courseStructuredData = document.createElement('script');
+  courseStructuredData.type = 'application/ld+json';
+  courseStructuredData.textContent = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Course',
+    name: course.name,
+    description: course.description,
+    provider: {
+      '@type': 'EducationalOrganization',
+      name: 'C-Dit Piravom'
+    }
+  });
+  document.head.appendChild(courseStructuredData);
+
   setText('#detail-category', course.categoryPrimary || course.categories[0]);
   setText('#detail-name', course.name);
   setText('#detail-short', course.shortDescription);
@@ -25,6 +64,11 @@ if (course) {
   if (image) {
     image.src = course.image;
     image.alt = course.name;
+    const srcSet = window.cditResponsiveImageSrcSet?.(course.image);
+    if (srcSet) {
+      image.srcset = srcSet;
+      image.sizes = '(max-width: 760px) 92vw, (max-width: 1030px) 92vw, 42vw';
+    }
   }
 
   const modulesList = document.getElementById('detail-modules');

@@ -183,15 +183,72 @@ const pauseOffscreenMarquees = () => {
   document.querySelectorAll('.marquee-wrap').forEach((marquee) => observer.observe(marquee));
 };
 
+window.cditResponsiveImageSrcSet = (source) => {
+  const imageUrl = new URL(source, document.baseURI);
+  if (imageUrl.hostname !== 'images.unsplash.com') return '';
+
+  return [480, 800, 1200].map((width) => {
+    const variant = new URL(imageUrl);
+    variant.searchParams.set('w', String(width));
+    return `${variant.toString()} ${width}w`;
+  }).join(', ');
+};
+
+const initCursorParallax = () => {
+  const elements = document.querySelectorAll('.cursorT');
+  if (!elements.length) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (window.matchMedia('(hover: none) and (pointer: coarse)').matches) return;
+
+  const strength = 0.04;
+  const maxDistance = 20;
+  let ticking = false;
+  let frameId = 0;
+  let lastEvent = null;
+
+  const applyParallax = () => {
+    ticking = false;
+    frameId = 0;
+    if (!lastEvent) return;
+
+    const { clientX, clientY } = lastEvent;
+    elements.forEach((element) => {
+      const rect = element.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const moveX = Math.max(-maxDistance, Math.min(maxDistance, (clientX - centerX) * strength));
+      const moveY = Math.max(-maxDistance, Math.min(maxDistance, (clientY - centerY) * strength));
+      element.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`;
+    });
+  };
+
+  document.addEventListener('mousemove', (event) => {
+    lastEvent = event;
+    if (ticking) return;
+    ticking = true;
+    frameId = window.requestAnimationFrame(applyParallax);
+  });
+
+  document.addEventListener('mouseleave', () => {
+    lastEvent = null;
+    if (frameId) window.cancelAnimationFrame(frameId);
+    frameId = 0;
+    ticking = false;
+    elements.forEach((element) => {
+      element.style.transform = 'translate3d(0, 0, 0)';
+    });
+  });
+};
+
 const renderFeaturedCourses = () => {
   const target = document.getElementById('featured-courses');
   if (!target || !window.cditData) return;
   const featuredCourses = window.cditData.courses.filter((course) => course.featured).slice(0, 6);
   target.innerHTML = featuredCourses.map((course) => `
     <article class="course-card">
-      ${course.categories.includes('PSC Approved') ? '<img class="psc-approved-badge" src="assets/pscapproved.png" alt="PSC Approved" width="88" height="88" />' : ''}
+      ${course.categories.includes('PSC Approved') ? '<img class="psc-approved-badge" src="assets/pscapproved.webp" alt="PSC Approved" width="88" height="88" />' : ''}
       <div class="course-card-media">
-        <img src="${course.image}" alt="${course.name}" loading="lazy" width="800" height="550" />
+        <img src="${course.image}" srcset="${window.cditResponsiveImageSrcSet(course.image)}" sizes="(max-width: 760px) 92vw, (max-width: 1030px) 46vw, 380px" alt="${course.name}" loading="lazy" width="800" height="550" />
       </div>
       <div class="course-card-content">
         <div class="course-meta">
@@ -280,3 +337,4 @@ handleFormSubmit('home-enquiry-form', 'home-success');
 initMobileFilterSheet();
 pauseOffscreenMarquees();
 initWhatsAppButton();
+initCursorParallax();

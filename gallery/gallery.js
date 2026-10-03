@@ -17,7 +17,7 @@ const filterGallery = () => {
 
   galleryMasonry.innerHTML = activeItems.map((item, index) => `
     <article class="gallery-item ${index % 3 === 0 ? 'large' : index % 2 === 0 ? 'medium' : 'small'}">
-      <img src="${item.image}" alt="${item.title}" loading="lazy" width="800" height="600" />
+      <img src="${item.image}" srcset="${window.cditResponsiveImageSrcSet(item.image)}" sizes="(max-width: 760px) 92vw, (max-width: 1030px) 46vw, 380px" alt="${item.title}" loading="lazy" width="800" height="600" />
       <div class="gallery-overlay">${item.title}</div>
     </article>
   `).join('');
