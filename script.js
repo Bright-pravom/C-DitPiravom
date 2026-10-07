@@ -261,7 +261,7 @@ const renderFeaturedCourses = () => {
   const featuredCourses = window.cditData.courses.filter((course) => course.featured).slice(0, 6);
   target.innerHTML = featuredCourses.map((course) => `
     <article class="course-card">
-      ${course.categories.includes('PSC Approved') ? '<img class="psc-approved-badge" src="assets/pscapproved.webp" alt="PSC Approved" width="88" height="88" />' : ''}
+      ${course.categories.includes('PSC Approved') ? '<img class="psc-approved-badge" src="assets/pscapproved.png" alt="PSC Approved" width="88" height="88" />' : ''}
       <div class="course-card-media">
         <img src="${course.image}" srcset="${window.cditResponsiveImageSrcSet(course.image)}" sizes="(max-width: 760px) 92vw, (max-width: 1030px) 46vw, 380px" alt="${course.name}" loading="lazy" width="800" height="550" />
       </div>
