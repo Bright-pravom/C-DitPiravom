@@ -200,11 +200,23 @@ const initCursorParallax = () => {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   if (window.matchMedia('(hover: none) and (pointer: coarse)').matches) return;
 
+  const moveEvent = 'PointerEvent' in window ? 'pointermove' : 'mousemove';
   const strength = 0.04;
   const maxDistance = 20;
   let ticking = false;
   let frameId = 0;
   let lastEvent = null;
+
+  const resetParallax = () => {
+    lastEvent = null;
+    if (frameId) window.cancelAnimationFrame(frameId);
+    frameId = 0;
+    ticking = false;
+    elements.forEach((element) => {
+      element.style.removeProperty('--cursor-parallax-x');
+      element.style.removeProperty('--cursor-parallax-y');
+    });
+  };
 
   const applyParallax = () => {
     ticking = false;
@@ -214,30 +226,33 @@ const initCursorParallax = () => {
     const { clientX, clientY } = lastEvent;
     elements.forEach((element) => {
       const rect = element.getBoundingClientRect();
+      const isPointerOverElement = clientX >= rect.left && clientX <= rect.right &&
+        clientY >= rect.top && clientY <= rect.bottom;
+      if (!isPointerOverElement) {
+        element.style.removeProperty('--cursor-parallax-x');
+        element.style.removeProperty('--cursor-parallax-y');
+        return;
+      }
+
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
       const moveX = Math.max(-maxDistance, Math.min(maxDistance, (clientX - centerX) * strength));
       const moveY = Math.max(-maxDistance, Math.min(maxDistance, (clientY - centerY) * strength));
-      element.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`;
+      element.style.setProperty('--cursor-parallax-x', `${moveX}px`);
+      element.style.setProperty('--cursor-parallax-y', `${moveY}px`);
     });
   };
 
-  document.addEventListener('mousemove', (event) => {
+  document.addEventListener(moveEvent, (event) => {
+    if (event.pointerType && event.pointerType !== 'mouse' && event.pointerType !== 'pen') return;
     lastEvent = event;
     if (ticking) return;
     ticking = true;
     frameId = window.requestAnimationFrame(applyParallax);
   });
 
-  document.addEventListener('mouseleave', () => {
-    lastEvent = null;
-    if (frameId) window.cancelAnimationFrame(frameId);
-    frameId = 0;
-    ticking = false;
-    elements.forEach((element) => {
-      element.style.transform = 'translate3d(0, 0, 0)';
-    });
-  });
+  document.addEventListener('pointerleave', resetParallax);
+  if (moveEvent === 'mousemove') document.addEventListener('mouseleave', resetParallax);
 };
 
 const renderFeaturedCourses = () => {

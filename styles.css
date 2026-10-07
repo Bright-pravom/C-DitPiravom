@@ -346,12 +346,12 @@ main { overflow: hidden; }
   width: max-content;
   white-space: nowrap;
   padding: 18px 0;
-  animation: marquee-scroll 56s linear infinite;
+  animation: marquee-scroll 100s linear infinite;
   animation-iteration-count: infinite;
   will-change: transform;
 }
 .marquee:hover { animation-play-state: paused; }
-.marquee span {
+.marquee-item {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -362,7 +362,17 @@ main { overflow: hidden; }
   color: var(--text-secondary);
   font-weight: 600;
 }
-.marquee-dot { width: 8px; height: 8px; border-radius: 999px; background: var(--primary); }
+.marquee-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  color: var(--primary);
+  font-size: 1rem;
+  line-height: 1;
+  flex: 0 0 1em;
+}
 @keyframes marquee-scroll {
   from { transform: translate3d(0, 0, 0); }
   to { transform: translate3d(-50%, 0, 0); }
@@ -855,18 +865,14 @@ main { overflow: hidden; }
   .lightbox-close:active, .lightbox-prev:active, .lightbox-next:active { background:rgba(15,23,42,0.9); }
 }
 
-/* The course strip is an intentional, continuously moving display. */
-.marquee {
-  animation-name: marquee-scroll !important;
-  animation-timing-function: linear !important;
-  animation-duration: 100s !important;
-  animation-iteration-count: infinite !important;
-}
-.marquee-wrap.is-offscreen .marquee { animation-play-state:paused !important; }
-.marquee:hover { animation-play-state: paused !important; }
+/* Pause the course strip when it is not useful to animate. */
+.marquee-wrap.is-offscreen .marquee,
+.marquee:hover { animation-play-state: paused; }
 
 @media (prefers-reduced-motion: reduce) {
   .marquee { animation: none !important; }
+  .marquee-wrap,
+  .marquee-wrap > .container { overflow-x: auto; }
 }
 
 /* ============================
@@ -875,8 +881,9 @@ main { overflow: hidden; }
    No HTML currently uses this — see script.js for the behavior.
    ============================ */
 .cursorT {
-  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-  will-change: transform;
+  translate: var(--cursor-parallax-x, 0px) var(--cursor-parallax-y, 0px);
+  transition: translate 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: translate;
 }
 
 @media (prefers-reduced-motion: reduce) {
