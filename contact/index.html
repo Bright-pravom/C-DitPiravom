@@ -79,7 +79,7 @@
               </div>
             </div>
 
-            <form class="enquiry-form" id="contact-form" novalidate>
+            <!-- <form class="enquiry-form" id="contact-form" novalidate>
               <div class="form-grid">
                 <div class="field-group">
                   <label for="contact-name">Full Name</label>
@@ -109,7 +109,8 @@
               </div>
               <button type="submit" class="btn btn-primary" style="margin-top: 18px; width: 100%;">Send Enquiry</button>
               <div class="form-success" id="contact-success">Thanks! Your message has been prepared. Please use the contact details above for direct follow-up.</div>
-            </form>
+            </form> -->
+            <img class="enquiry-image" src="../assets/enquirenow.png" alt="Enquire now" width="626" height="626" />
           </div>
         </div>
       </section>
@@ -152,37 +153,41 @@
 
     <script src="../script.js"></script>
     <script>
-      const validateField = (fieldName, value) => {
-        const actual = (value || '').trim();
-        if (fieldName === 'name' && actual.length < 2) return 'Please enter your name.';
-        if (fieldName === 'phone' && actual.length < 7) return 'Please enter a valid phone number.';
-        if (fieldName === 'course' && actual.length < 2) return 'Please tell us which course or service you need.';
-        if (fieldName === 'message' && actual.length < 10) return 'Please add a short message.';
-        if (fieldName === 'email' && actual && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(actual)) return 'Please enter a valid email address.';
-        return '';
-      };
-      const contactForm = document.getElementById('contact-form');
-      const successBox = document.getElementById('contact-success');
-      contactForm.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const entries = new FormData(contactForm);
-        let hasError = false;
-        [...entries.keys()].forEach((key) => {
-          const value = String(entries.get(key) || '');
-          const message = validateField(key, value);
-          const input = document.querySelector(`[name="${key}"]`);
-          const errorNode = document.querySelector(`[data-error-for="${key}"]`);
-          if (input) input.classList.toggle('invalid', Boolean(message));
-          if (errorNode) errorNode.textContent = message;
-          if (message) hasError = true;
-        });
-        if (hasError) {
-          successBox.classList.remove('visible');
-          return;
+      (() => {
+        const validateField = (fieldName, value) => {
+          const actual = (value || '').trim();
+          if (fieldName === 'name' && actual.length < 2) return 'Please enter your name.';
+          if (fieldName === 'phone' && actual.length < 7) return 'Please enter a valid phone number.';
+          if (fieldName === 'course' && actual.length < 2) return 'Please tell us which course or service you need.';
+          if (fieldName === 'message' && actual.length < 10) return 'Please add a short message.';
+          if (fieldName === 'email' && actual && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(actual)) return 'Please enter a valid email address.';
+          return '';
+        };
+        const contactForm = document.getElementById('contact-form');
+        const successBox = document.getElementById('contact-success');
+        if (contactForm) {
+          contactForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const entries = new FormData(contactForm);
+            let hasError = false;
+            [...entries.keys()].forEach((key) => {
+              const value = String(entries.get(key) || '');
+              const message = validateField(key, value);
+              const input = document.querySelector(`[name="${key}"]`);
+              const errorNode = document.querySelector(`[data-error-for="${key}"]`);
+              if (input) input.classList.toggle('invalid', Boolean(message));
+              if (errorNode) errorNode.textContent = message;
+              if (message) hasError = true;
+            });
+            if (hasError) {
+              successBox.classList.remove('visible');
+              return;
+            }
+            successBox.classList.add('visible');
+            contactForm.reset();
+          });
         }
-        successBox.classList.add('visible');
-        contactForm.reset();
-      });
+      })();
     </script>
   </body>
 </html>

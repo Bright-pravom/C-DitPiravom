@@ -529,6 +529,12 @@ main { overflow: hidden; }
 .enquiry-form {
   background:white; border:1px solid var(--border); border-radius:20px; padding:24px; box-shadow:0 10px 24px rgba(15,23,42,0.04);
 }
+.enquiry-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+}
 .form-grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; }
 .field-group { display:grid; gap:8px; }
 .field-group.wide { grid-column: 1 / -1; }
