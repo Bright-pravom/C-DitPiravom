@@ -736,6 +736,7 @@ main { overflow: hidden; }
 .not-found-card h1 { font-size: clamp(3rem, 8vw, 6rem); margin: 0 0 10px; color: var(--primary); }
 
 @media (max-width: 1030px) {
+  .enquiry-image { display: none; }
   .whatsapp-floating-button {
     right: 20px;
     bottom: calc(20px + var(--safe-bottom));
@@ -894,9 +895,7 @@ main { overflow: hidden; }
 .marquee:hover { animation-play-state: paused; }
 
 @media (prefers-reduced-motion: reduce) {
-  .marquee { animation: none !important; }
-  .marquee-wrap,
-  .marquee-wrap > .container { overflow-x: auto; }
+  .marquee { animation: marquee-scroll 100s linear infinite !important; }
 }
 
 /* ============================
